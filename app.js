@@ -6,6 +6,8 @@ var cheerio = require("cheerio");
 var superagent = require("superagent");
 // 并发控制
 var eventproxy = require("eventproxy");
+// 控制并发
+var async = require("async");
 // node.js标准库
 var url = require("url");
 // 创建app
@@ -81,6 +83,35 @@ app.get("/spider2", function (req, res, next) {
                     })
             });
         })
+})
+
+app.get("/async", function (req, res, next) {
+    var concurrencyCount = 0;
+    var fetchUrl = function (url, callback) {
+        // 随机一个整数作为定时器的时延
+        var delay = parseInt((Math.random() * 10000000) % 2000, 10);
+        concurrencyCount++;
+        console.log("现在的并发数:", concurrencyCount, ", 正在抓取:", url, ", 耗时:" + delay + "毫秒");
+        // 这里使用定时器模拟网络请求
+        setTimeout(function () {
+            concurrencyCount--;
+            callback(null, url + " html content");
+        }, delay);
+    }
+
+    // 模拟请求队列
+    var urls = [];
+    for (var i = 0; i < 30; i ++) {
+        urls.push("http://datasource_" + i);
+    }
+
+    // 控制队列的并发数为5个
+    async.mapLimit(urls, 5, function (url, callback) {
+        fetchUrl(url, callback);
+    }, function (err, result) {
+        console.log("final:");
+        console.log(result);
+    })
 })
 
 app.listen(3000, function () {
