@@ -17,6 +17,10 @@
   },
   "homepage": "https://github.com/Coax-Dr/study_node_pro#readme",
   "dependencies": {
-    "express": "^4.17.3"
+    "cheerio": "^1.0.0-rc.10",
+    "eventproxy": "^1.0.0",
+    "express": "^4.17.3",
+    "superagent": "^7.1.1",
+    "utility": "^1.17.0"
   }
 }
