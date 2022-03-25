@@ -23,5 +23,8 @@
     "express": "^4.17.3",
     "superagent": "^7.1.1",
     "utility": "^1.17.0"
+  },
+  "devDependencies": {
+    "should": "^13.2.3"
   }
 }
